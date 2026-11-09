@@ -23,6 +23,13 @@
   --butter: #f4cf78;
   --on-butter: #26121a;
   --danger: #a3261c;
+  --art-line: #2c1a24;
+  --art-pink: #f5b8c4;
+  --art-cherry: #c2244b;
+  --art-butter: #f4cf78;
+  --art-cream: #fff6ea;
+  --art-biscuit: #dfa266;
+  --art-choco: #6b3a2a;
   --display: "Yeseva One", Georgia, "Times New Roman", serif;
   --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
@@ -56,6 +63,25 @@ button { cursor: pointer; }
 .hero h1 { font-size: clamp(2.4rem, 7vw, 4.25rem); color: var(--accent); }
 .hero p { font-size: 1.125rem; max-width: 56ch; }
 .facts { display: flex; flex-wrap: wrap; gap: 6px 20px; color: var(--muted); font-size: .9375rem; margin-top: 6px; }
+
+.insta { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); font-weight: 600; text-decoration: none; min-height: 24px; }
+.insta:hover span { text-decoration: underline; }
+
+.demo, .hero, main { position: relative; z-index: 1; }
+.art * { stroke: var(--art-line); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.art .pk { fill: var(--art-pink); }
+.art .ch { fill: var(--art-cherry); }
+.art .bu { fill: var(--art-butter); }
+.art .cr { fill: var(--art-cream); }
+.art .bi { fill: var(--art-biscuit); }
+.art .co { fill: var(--art-choco); }
+.art .bg { fill: var(--bg); }
+.art .no { fill: none; }
+.decor-side { display: none; }
+.hero-art { display: flex; gap: 14px; margin-top: 12px; }
+.hero-art svg { width: 60px; height: 60px; }
+.hero-art svg:nth-child(odd) { transform: rotate(-6deg); }
+.hero-art svg:nth-child(even) { transform: rotate(5deg); }
 
 .layout { display: grid; gap: 40px; align-items: start; padding-bottom: 64px; }
 .steps { display: grid; gap: 48px; min-width: 0; }
@@ -180,10 +206,78 @@ body.has-bar { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
   .mobile-bar { display: none; }
   body.has-bar { padding-bottom: 0; }
 }
+@media (min-width: 1240px) {
+  :root { --side: max(130px, calc((100vw - 1160px) / 2)); }
+  .wrap { max-width: min(1160px, calc(100vw - 260px)); }
+  .hero-art { display: none; }
+  .decor-side { position: fixed; top: 0; bottom: 0; width: var(--side); z-index: 0; display: flex; flex-direction: column; justify-content: space-evenly; align-items: center; pointer-events: none; }
+  .decor-side.left { left: 0; }
+  .decor-side.right { right: 0; }
+  .decor-side svg { width: min(116px, 74%); height: auto; max-height: 26vh; }
+  .decor-side svg:nth-child(1) { transform: rotate(-8deg) translateX(6px); }
+  .decor-side svg:nth-child(2) { transform: rotate(6deg) translateX(-8px); }
+  .decor-side svg:nth-child(3) { transform: rotate(-4deg) translateX(10px); }
+  .right svg:nth-child(1) { transform: rotate(7deg) translateX(-6px); }
+  .right svg:nth-child(2) { transform: rotate(-6deg) translateX(8px); }
+  .right svg:nth-child(3) { transform: rotate(5deg) translateX(-10px); }
+}
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
 </style>
 </head>
 <body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="art-cupcake" viewBox="0 0 120 120"><g class="art">
+    <path class="bu" d="M32 66 42 108q1 5 6 5h24q5 0 6-5l10-42z"/>
+    <path class="no" d="M48 72l5 38M60 72v38M72 72l-5 38"/>
+    <path class="pk" d="M26 67C17 55 29 44 38 47c-3-17 14-24 22-17 8-7 25 0 22 17 9-3 21 8 12 20-14 7-54 7-68 0z"/>
+    <path class="no" d="M44 56l5-3M63 44l5 2M72 60l5-3M56 62l3 3"/>
+    <circle class="ch" cx="60" cy="22" r="9"/>
+    <path class="no" d="M62 14q4-8 12-8"/>
+  </g></symbol>
+  <symbol id="art-layer" viewBox="0 0 120 120"><g class="art">
+    <ellipse class="bu" cx="60" cy="102" rx="48" ry="7"/>
+    <path class="bu" d="M53 108h14v6H53z"/>
+    <rect class="cr" x="24" y="46" width="72" height="54" rx="6"/>
+    <path class="pk" d="M24 64h72v8H24zM24 83h72v8H24z"/>
+    <path class="pk" d="M24 54v-4q0-8 8-8h56q8 0 8 8v4q-6 10-12 0-6-6-12 4-6 8-12-4-6-6-12 6-6 8-12-6-6-6-12 0z"/>
+    <circle class="ch" cx="42" cy="35" r="7"/><circle class="ch" cx="60" cy="32" r="8"/><circle class="ch" cx="78" cy="35" r="7"/>
+    <path class="no" d="M60 24q2-7 9-8"/>
+  </g></symbol>
+  <symbol id="art-slice" viewBox="0 0 120 120"><g class="art">
+    <path class="cr" d="M16 54h88v44q0 4-4 4H20q-4 0-4-4z"/>
+    <path class="co" d="M16 66h88v9H16zM16 86h88v8H16z"/>
+    <path class="pk" d="M16 54 74 28q18-6 30 26z"/>
+    <path class="ch" d="M70 34c-5-10 12-16 17-7 3 6-3 13-8 13-4 0-7-2-9-6z"/>
+    <path class="no" d="M80 24q2-6 8-7"/>
+  </g></symbol>
+  <symbol id="art-cookie" viewBox="0 0 120 120"><g class="art">
+    <path class="bi" d="M60 16c24 0 44 19 44 44s-20 44-44 44-44-19-44-44 20-44 44-44z"/>
+    <circle class="co" cx="44" cy="42" r="7"/><circle class="co" cx="74" cy="38" r="6"/><circle class="co" cx="84" cy="66" r="7"/><circle class="co" cx="56" cy="66" r="8"/><circle class="co" cx="38" cy="80" r="5"/><circle class="co" cx="68" cy="88" r="5"/>
+  </g></symbol>
+  <symbol id="art-macaron" viewBox="0 0 120 120"><g class="art">
+    <path class="pk" d="M20 76h80q0 26-40 26T20 76z"/>
+    <rect class="cr" x="25" y="60" width="70" height="14" rx="7"/>
+    <path class="pk" d="M20 56q0-34 40-34t40 34q0 4-4 4H24q-4 0-4-4z"/>
+    <path class="no" d="M38 40q8-9 18-10"/>
+  </g></symbol>
+  <symbol id="art-donut" viewBox="0 0 120 120"><g class="art">
+    <circle class="bi" cx="60" cy="60" r="44"/>
+    <path class="pk" d="M60 24c20 0 37 15 37 34 0 8-6 8-9 13-4 7-5 14-12 11-7-4-11 3-18 3-8 0-12-7-20-5-6 1-10-6-11-13-1-5-4-7-4-11 0-18 17-32 37-32z"/>
+    <circle class="bg" cx="60" cy="58" r="13"/>
+    <path class="no" d="M36 48l4-5M50 34l6 1M78 38l4 4M84 60l-1 5M44 72l5 3M68 76l5-2"/>
+  </g></symbol>
+</svg>
+<div class="decor-side left" aria-hidden="true">
+  <svg viewBox="0 0 120 120"><use href="#art-cupcake"/></svg>
+  <svg viewBox="0 0 120 120"><use href="#art-slice"/></svg>
+  <svg viewBox="0 0 120 120"><use href="#art-macaron"/></svg>
+</div>
+<div class="decor-side right" aria-hidden="true">
+  <svg viewBox="0 0 120 120"><use href="#art-layer"/></svg>
+  <svg viewBox="0 0 120 120"><use href="#art-cookie"/></svg>
+  <svg viewBox="0 0 120 120"><use href="#art-donut"/></svg>
+</div>
 
 <div class="demo gutter" id="demoBanner"><div class="wrap">Aperçu de démonstration. Les horaires et les places restantes sont des exemples, et aucune commande n'est transmise.</div></div>
 
@@ -192,6 +286,12 @@ body.has-bar { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
     <h1 id="shopName"></h1>
     <p id="shopTagline"></p>
     <div class="facts" id="shopFacts"></div>
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 120 120"><use href="#art-layer"/></svg>
+      <svg viewBox="0 0 120 120"><use href="#art-cupcake"/></svg>
+      <svg viewBox="0 0 120 120"><use href="#art-cookie"/></svg>
+      <svg viewBox="0 0 120 120"><use href="#art-macaron"/></svg>
+    </div>
   </div>
 </header>
 
@@ -314,7 +414,8 @@ const CONFIG = {
   boutique: {
     nom: "Sweety Cakes",
     accroche: "Des gâteaux pour toute occasion et des gourmandises pour vos buffets, toute l'année. Composez votre commande et réservez votre créneau.",
-    infos: ["Les Bordes / Sully-sur-Loire et alentours", "Livraison Orléans et Montargis", "@sweetycakees_"],
+    infos: ["Les Bordes / Sully-sur-Loire et alentours", "Livraison Orléans et Montargis"],
+    instagram: { compte: "@sweetycakees_", url: "https://www.instagram.com/sweetycakees_/" },
     retrait: "Les Bordes / Sully-sur-Loire"
   },
   placesParCreneau: 3,
@@ -488,7 +589,12 @@ function renderShop() {
   $("demoBanner").hidden = !CONFIG.demo;
   $("shopName").textContent = CONFIG.boutique.nom;
   $("shopTagline").textContent = CONFIG.boutique.accroche;
-  $("shopFacts").innerHTML = CONFIG.boutique.infos.map(i => `<span>${esc(i)}</span>`).join("");
+  const insta = CONFIG.boutique.instagram;
+  $("shopFacts").innerHTML = CONFIG.boutique.infos.map(i => `<span>${esc(i)}</span>`).join("") + `
+    <a class="insta" href="${esc(insta.url)}" target="_blank" rel="noopener" aria-label="Instagram de ${esc(CONFIG.boutique.nom)} : ${esc(insta.compte)}">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>
+      <span>${esc(insta.compte)}</span>
+    </a>`;
   $("modes").innerHTML = `
     <label class="mode"><input type="radio" name="mode" value="retrait" checked><span><strong>Retrait à l'atelier</strong><small>${esc(CONFIG.boutique.retrait)}</small></span></label>
     ${CONFIG.livraison.active ? `<label class="mode"><input type="radio" name="mode" value="livraison"><span><strong>Livraison</strong><small>${esc(CONFIG.livraison.zone)}</small></span></label>` : ""}`;
@@ -674,7 +780,7 @@ async function submitOrder() {
       return;
     }
     if (!answer.ok && answer.error === "occupe") { showFormError("Beaucoup de commandes arrivent en même temps. Réessayez dans quelques secondes."); return; }
-    if (!answer.ok) { orderId = null; showFormError(`Cette commande n'a pas pu être enregistrée. Contactez ${CONFIG.boutique.infos[2]} sur Instagram.`); return; }
+    if (!answer.ok) { orderId = null; showFormError(`Cette commande n'a pas pu être enregistrée. Contactez ${CONFIG.boutique.instagram.compte} sur Instagram.`); return; }
     ref = answer.ref;
     orderId = null;
   } else {
