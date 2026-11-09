@@ -191,6 +191,17 @@ button { cursor: pointer; }
 .mobile-bar strong { font-variant-numeric: tabular-nums; }
 body.has-bar { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
 
+.faq { padding-bottom: 72px; display: grid; gap: 14px; scroll-margin-top: 24px; }
+.faq h2 { font-size: 1.75rem; }
+.faq-item { border-bottom: 1px solid var(--line); max-width: 760px; }
+.faq-item summary { cursor: pointer; font-weight: 600; padding-block: 13px; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after { content: "+"; color: var(--accent); font-weight: 700; font-size: 1.25rem; line-height: 1.2; flex: none; }
+.faq-item[open] summary::after { content: "−"; }
+.faq-item p { color: var(--muted); padding-bottom: 14px; max-width: 65ch; }
+.faq-link { color: var(--accent); font-weight: 600; }
+#faqContact { margin-top: 6px; }
+#faqContact .insta { display: inline; }
 .confirmation { padding-block: 8px 72px; }
 .confirmation .ticket { max-width: 560px; margin-inline: auto; }
 .confirmation h2 { font-size: 2rem; color: var(--accent); }
@@ -381,6 +392,12 @@ body.has-bar { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
   </form>
 
   <section class="wrap confirmation" id="confirmation" hidden tabindex="-1" aria-live="polite"></section>
+
+  <section class="wrap faq" id="faq" aria-labelledby="faqTitle">
+    <h2 id="faqTitle">Questions fréquentes</h2>
+    <div id="faqList"></div>
+    <p id="faqContact"></p>
+  </section>
 </main>
 
 <div class="mobile-bar" id="mobileBar" hidden>
@@ -418,6 +435,23 @@ const CONFIG = {
     instagram: { compte: "@sweetycakees_", url: "https://www.instagram.com/sweetycakees_/" },
     retrait: "Les Bordes / Sully-sur-Loire"
   },
+  // Questions fréquentes affichées sous la commande : à modifier ici.
+  faq: [
+    { q: "Comment passer commande ?", r: "Composez votre commande, choisissez un jour et une heure, puis laissez vos coordonnées. Votre créneau est réservé dès la validation." },
+    { q: "Combien de temps à l'avance dois-je commander ?", r: "Comptez 48 h pour les petites commandes, et 72 h pour les gâteaux et les plateaux salés. Le calendrier ne propose que les dates possibles pour votre commande." },
+    { q: "Comment savoir si ma commande est bien prise en compte ?", r: "Vous recevez votre bon de commande par e-mail, avec votre référence et votre créneau. Sweety Cakes vous confirme ensuite la commande en message. Si vous ne voyez pas l'e-mail, regardez dans vos spams." },
+    { q: "Où récupérer ma commande ?", r: "Le retrait se fait à Les Bordes / Sully-sur-Loire, au créneau que vous avez réservé." },
+    { q: "Livrez-vous à domicile ?", r: "Oui, la livraison est possible sur Orléans et Montargis, avec un supplément selon votre secteur. Le montant vous est confirmé en message." },
+    { q: "Pourquoi certains produits sont-ils « sur devis » ?", r: "Le prix dépend de votre demande : taille, nombre de parts, décoration. Vous recevez le devis en message, et un acompte est obligatoire pour valider la commande." },
+    { q: "Comment commander pour un événement ou en grande quantité ?", r: "Les devis pour les événements se font à l'avance, avec un acompte obligatoire. Pour plus de 10 brownies ou pour un buffet, précisez votre demande dans la partie 3 ou écrivez-nous sur Instagram." },
+    { q: "Puis-je personnaliser mon gâteau ?", r: "Oui. Choisissez parmi les neuf saveurs proposées, indiquez le message à écrire sur le gâteau, puis ajoutez vos envies dans la case Allergies ou précisions." },
+    { q: "Quand le brunch est-il disponible ?", r: "Les box brunch sont proposées tous les dimanches : solo à 25 € ou duo à 45 €, avec une boisson au choix. Le brunch est halal." },
+    { q: "Vos autres produits sont-ils halal ?", r: "Demandez-le en message sur Instagram avant de commander, pour avoir une réponse sur le produit qui vous intéresse." },
+    { q: "Je suis allergique, comment faire ?", r: "Contactez Sweety Cakes sur Instagram avant de commander, puis indiquez vos allergies dans la case prévue à cet effet." },
+    { q: "Le créneau que je veux est complet, que faire ?", r: "Choisissez une autre heure ou un autre jour. Les jours complets sont hachurés dans le calendrier." },
+    { q: "Puis-je modifier ou annuler ma commande ?", r: "Écrivez à Sweety Cakes sur Instagram le plus tôt possible, en indiquant votre référence." },
+    { q: "Comment se passe le paiement ?", r: "Le paiement ne se fait pas sur ce site. Les modalités de règlement vous sont précisées en message lors de la confirmation." }
+  ],
   placesParCreneau: 3,
   reservableSurJours: 56,
   // EXEMPLE À REMPLACER. 0 = dimanche, 1 = lundi… Un jour absent est un jour fermé.
@@ -594,10 +628,16 @@ function renderShop() {
     <a class="insta" href="${esc(insta.url)}" target="_blank" rel="noopener" aria-label="Instagram de ${esc(CONFIG.boutique.nom)} : ${esc(insta.compte)}">
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>
       <span>${esc(insta.compte)}</span>
-    </a>`;
+    </a>
+    <a class="faq-link" href="#faq">Questions fréquentes</a>`;
   $("modes").innerHTML = `
     <label class="mode"><input type="radio" name="mode" value="retrait" checked><span><strong>Retrait à l'atelier</strong><small>${esc(CONFIG.boutique.retrait)}</small></span></label>
     ${CONFIG.livraison.active ? `<label class="mode"><input type="radio" name="mode" value="livraison"><span><strong>Livraison</strong><small>${esc(CONFIG.livraison.zone)}</small></span></label>` : ""}`;
+}
+function renderFaq() {
+  const insta = CONFIG.boutique.instagram;
+  $("faqList").innerHTML = CONFIG.faq.map(f => `<details class="faq-item"><summary>${esc(f.q)}</summary><p>${esc(f.r)}</p></details>`).join("");
+  $("faqContact").innerHTML = `Une autre question ? Écrivez-nous sur Instagram : <a class="insta" href="${esc(insta.url)}" target="_blank" rel="noopener"><span>${esc(insta.compte)}</span></a>`;
 }
 function renderMenu() {
   $("menu").innerHTML = CONFIG.carte.map(cat => `
@@ -866,7 +906,7 @@ document.addEventListener("change", e => {
 $("orderForm").addEventListener("submit", e => { e.preventDefault(); submitOrder(); });
 
 /* ---------- Démarrage ---------- */
-renderShop(); renderMenu(); refreshPlanning(); loadAvailability();
+renderShop(); renderFaq(); renderMenu(); refreshPlanning(); loadAvailability();
 </script>
 </body>
 </html>
