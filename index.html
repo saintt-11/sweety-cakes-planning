@@ -345,8 +345,8 @@ body.has-bar { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
             <input id="instagram" name="instagram" autocomplete="off" placeholder="@votrecompte">
           </div>
           <div class="field">
-            <label for="email">E-mail <span>(facultatif)</span></label>
-            <input id="email" name="email" type="email" autocomplete="email" aria-describedby="emailError">
+            <label for="email">E-mail <span>(pour recevoir votre bon de commande)</span></label>
+            <input id="email" name="email" type="email" autocomplete="email" required aria-describedby="emailError">
             <div class="error" id="emailError" hidden></div>
           </div>
           <div class="hp" aria-hidden="true"><label for="website">Ne pas remplir</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
@@ -715,7 +715,7 @@ function validate() {
   const checks = [
     setError("name", v("name").length >= 2 ? "" : "Indiquez votre nom et votre prénom."),
     setError("phone", /^(\+33\s?|0033\s?|0)[1-9]([\s.-]?\d{2}){4}$/.test(v("phone")) ? "" : "Saisissez un numéro à 10 chiffres, par exemple 06 12 34 56 78."),
-    setError("email", !v("email") || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v("email")) ? "" : "Vérifiez votre adresse e-mail, ou laissez ce champ vide."),
+    setError("email", /^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]+$/.test(v("email")) ? "" : "Indiquez votre e-mail, par exemple prenom@gmail.com, pour recevoir votre bon de commande."),
     state.mode === "livraison" ? setError("address", v("address").length >= 6 ? "" : "Indiquez l'adresse où livrer la commande.") : setError("address", "")
   ];
   const problems = [];
@@ -764,6 +764,7 @@ async function submitOrder() {
   const quote = hasQuote(), feeUnknown = state.mode === "livraison" && CONFIG.livraison.frais == null;
   const liv = state.mode === "livraison";
   let ref;
+  let mailSent = false;
   if (CONFIG.commandesUrl) {
     const btn = document.querySelector(".submit");
     orderId = orderId || newId();
@@ -782,6 +783,7 @@ async function submitOrder() {
     if (!answer.ok && answer.error === "occupe") { showFormError("Beaucoup de commandes arrivent en même temps. Réessayez dans quelques secondes."); return; }
     if (!answer.ok) { orderId = null; showFormError(`Cette commande n'a pas pu être enregistrée. Contactez ${CONFIG.boutique.instagram.compte} sur Instagram.`); return; }
     ref = answer.ref;
+    mailSent = answer.mail === true;
     orderId = null;
   } else {
     ref = "CMD-" + Date.now().toString(36).slice(-5).toUpperCase();
@@ -801,6 +803,7 @@ async function submitOrder() {
         ${feeUnknown ? `<div class="row"><span>Supplément livraison</span><span>À confirmer</span></div>` : ""}
         <div class="row total"><span>${quote || feeUnknown ? "Total hors " + [quote && "devis", feeUnknown && "livraison"].filter(Boolean).join(" et ") : "Total"}</span><span>${euros(total)}</span></div>
       </div>
+      ${CONFIG.commandesUrl ? `<p>${mailSent ? `Votre bon de commande vient d'être envoyé à ${esc($("email").value.trim())}.` : "Notez votre référence : le bon de commande n'a pas pu être envoyé par e-mail."}</p>` : ""}
       <p>${quote ? "Sweety Cakes vous envoie le devis en message. Un acompte est obligatoire pour valider la commande." : "Sweety Cakes vous confirme la commande en message."}</p>
       <div>
       </div>
