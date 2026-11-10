@@ -99,6 +99,7 @@ button { cursor: pointer; }
 .product-top { display: flex; justify-content: space-between; gap: 16px; }
 .product-name { font-weight: 700; font-size: 1.0625rem; }
 .product-desc { color: var(--muted); font-size: .9375rem; }
+.product-lead { margin-top: 4px; color: var(--muted); font-size: .8125rem; font-weight: 600; }
 .product-allergens { color: var(--muted); font-size: .8125rem; }
 .product-price { font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .product-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
@@ -438,7 +439,7 @@ const CONFIG = {
   // Questions fréquentes affichées sous la commande : à modifier ici.
   faq: [
     { q: "Comment passer commande ?", r: "Composez votre commande, choisissez un jour et une heure, puis laissez vos coordonnées. Votre créneau est réservé dès la validation." },
-    { q: "Combien de temps à l'avance dois-je commander ?", r: "Comptez 48 h pour les petites commandes, et 72 h pour les gâteaux et les plateaux salés. Le calendrier ne propose que les dates possibles pour votre commande." },
+    { q: "Combien de temps à l'avance dois-je commander ?", r: "Cela dépend des produits : 24 h pour les cookies et les sushi crêpes, 48 h pour les brownies, cupcakes, cinnamon rolls et mini pancakes, 72 h pour le brunch, 1 semaine pour les bento cakes, number cakes et plateaux, 2 semaines pour les layer cakes. Le délai est indiqué sous chaque produit, et le calendrier ne propose que les dates possibles pour votre commande." },
     { q: "Comment savoir si ma commande est bien prise en compte ?", r: "Vous recevez votre bon de commande par e-mail, avec votre référence et votre créneau. Sweety Cakes vous confirme ensuite la commande en message. Si vous ne voyez pas l'e-mail, regardez dans vos spams." },
     { q: "Où récupérer ma commande ?", r: "Le retrait se fait à Les Bordes / Sully-sur-Loire, au créneau que vous avez réservé." },
     { q: "Livrez-vous à domicile ?", r: "Oui, la livraison est possible sur Orléans et Montargis, avec un supplément selon votre secteur. Le montant vous est confirmé en message." },
@@ -470,13 +471,14 @@ const CONFIG = {
   // Un prix null s'affiche « Sur devis ».
   carte: [
     {
-      categorie: "Gâteaux", delai: 3, note: "Sur devis, à commander 72 h à l'avance",
+      categorie: "Gâteaux", note: "Sur devis",
       produits: [
-        { id: "gateau", nom: "Layer cake, bento cake ou number cake", desc: "Pour toute occasion. Précisez le nombre de parts ou le chiffre souhaité dans la partie 3.", formats: [["Layer cake", null], ["Bento cake", null], ["Number cake", null]], choix: [SAVEURS_GATEAU] }
+        { id: "layer-cake", nom: "Layer cake", delai: 14, desc: "Pour toute occasion. Précisez le nombre de parts dans la partie 3.", formats: [["Layer cake", null]], choix: [SAVEURS_GATEAU] },
+        { id: "gateau", nom: "Bento cake ou number cake", delai: 7, desc: "Précisez le nombre de parts ou le chiffre souhaité dans la partie 3.", formats: [["Bento cake", null], ["Number cake", null]], choix: [SAVEURS_GATEAU] }
       ]
     },
     {
-      categorie: "Brunch", delai: 2, jours: [0], note: "Tous les dimanches, à commander 48 h à l'avance",
+      categorie: "Brunch", delai: 3, jours: [0], note: "Tous les dimanches",
       produits: [
         { id: "brunch", nom: "Box brunch", desc: "Egg muffin, charcuterie, brioche perdue, une pièce salée et une pièce sucrée au choix. Halal.", formats: [["Solo", 25], ["Duo", 45]], choix: [
           { label: "Salé", options: ["Bagel thon", "Bagel poulet", "Croissant saumon/avocat"] },
@@ -486,7 +488,7 @@ const CONFIG = {
       ]
     },
     {
-      categorie: "Gourmandises", delai: 2, note: "À commander 48 h à l'avance",
+      categorie: "Gourmandises", delai: 2,
       produits: [
         { id: "brownies", nom: "Brownies", desc: "Toppings au choix. Pour une plus grande quantité, demandez un devis en message.", formats: [["À l'unité", 3.5], ["Box de 4", 14], ["Box de 6", 20], ["Box de 8", 25], ["Box de 10", 32]], choix: [
           { label: "Toppings", multiple: true, options: ["Nutella", "Spéculos", "Crème Bueno", "Caramel", "Pistache"] }
@@ -498,14 +500,16 @@ const CONFIG = {
         { id: "cinnamon-premium", nom: "Cinnamon roll premium", desc: "Des saveurs plus gourmandes.", formats: [["L'unité", 4.5]], choix: [
           { label: "Saveur", options: ["Caramel beurre salé / noix de pécan", "Nutella / noisettes", "Nocciolata / Kinder Bueno", "Spéculos / crunchy"] }
         ] },
-        { id: "cookies", nom: "Cookies", desc: "Dites-nous vos envies dans la partie 3.", formats: [["Box", null]] },
-        { id: "cupcakes", nom: "Cupcakes", desc: "Dites-nous vos envies dans la partie 3.", formats: [["Box", null]] }
+        { id: "cookies", nom: "Cookies", delai: 1, desc: "Dites-nous vos envies dans la partie 3.", formats: [["Box", null]] },
+        { id: "cupcakes", nom: "Cupcakes", desc: "Dites-nous vos envies dans la partie 3.", formats: [["Box", null]] },
+        { id: "sushi-crepes", nom: "Sushi crêpes", delai: 1, desc: "Dites-nous vos envies dans la partie 3.", formats: [["Box", null]] }
       ]
     },
     {
-      categorie: "Salé", delai: 3, note: "Sur devis, à commander 72 h à l'avance",
+      categorie: "Plateaux", delai: 7, note: "Sur devis",
       produits: [
-        { id: "plateau-sale", nom: "Plateau salé", desc: "Pour vos buffets et apéritifs. Indiquez le nombre de personnes dans la partie 3.", formats: [["Plateau", null]] }
+        { id: "plateau-sale", nom: "Plateau salé", desc: "Pour vos buffets et apéritifs. Indiquez le nombre de personnes dans la partie 3.", formats: [["Plateau", null]] },
+        { id: "plateau-sucre", nom: "Plateau sucré", desc: "Pour vos buffets et desserts. Indiquez le nombre de personnes dans la partie 3.", formats: [["Plateau", null]] }
       ]
     }
   ]
@@ -586,6 +590,7 @@ const cartLines = () => Object.entries(state.cart).map(([key, qty]) => {
   const detail = (p.choix || []).map((c, g) => opts[g].map(n => c.options[n]).join(", ")).filter(Boolean).join(" · ");
   return { key, id, p, label, detail, price: base === null ? null : base + optionsPrice(p, opts), qty };
 });
+const delaiText = d => d % 7 === 0 ? `${d / 7} semaine${d > 7 ? "s" : ""}` : `${d * 24} h`;
 const leadDays = () => Math.max(1, ...cartLines().map(l => l.p.delai));
 const delivery = () => state.mode === "livraison" ? (CONFIG.livraison.frais || 0) : 0;
 const subtotal = () => cartLines().reduce((s, l) => s + (l.price || 0) * l.qty, 0);
@@ -642,13 +647,14 @@ function renderFaq() {
 function renderMenu() {
   $("menu").innerHTML = CONFIG.carte.map(cat => `
     <div class="category">
-      <div class="category-head"><h3>${esc(cat.categorie)}</h3><span>${esc(cat.note)}</span></div>
+      <div class="category-head"><h3>${esc(cat.categorie)}</h3>${cat.note ? `<span>${esc(cat.note)}</span>` : ""}</div>
       ${cat.produits.map(p => `
         <article class="product">
           <div class="product-top">
             <div>
               <div class="product-name">${esc(p.nom)}</div>
               <div class="product-desc">${esc(p.desc)}</div>
+              <div class="product-lead">À commander ${delaiText(products.get(p.id).delai)} à l'avance</div>
             </div>
             <div class="product-price" id="price-${p.id}"></div>
           </div>
