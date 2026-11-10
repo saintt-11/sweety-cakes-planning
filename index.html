@@ -11,39 +11,39 @@
 <style>
 /* Mise en page : la carte et le planning à gauche, le bon de commande festonné qui suit à droite. */
 :root {
-  --bg: #fbeeeb;
-  --surface: #fffaf8;
-  --surface-2: #f6dcd9;
-  --ink: #26121a;
-  --muted: #6b5258;
-  --line: #eccfcc;
-  --accent: #b0143d;
-  --accent-soft: #fbd7de;
-  --on-accent: #fffaf8;
-  --butter: #f4cf78;
-  --on-butter: #26121a;
+  --bg: #f6efe6;
+  --surface: #ffffff;
+  --surface-2: #ede2d3;
+  --ink: #2b1d14;
+  --muted: #6e5a4b;
+  --line: #e2d4c1;
+  --accent: #7a4a2b;
+  --accent-soft: #eadbc8;
+  --on-accent: #ffffff;
+  --butter: #dcbc8e;
+  --on-butter: #2b1d14;
   --danger: #a3261c;
-  --art-line: #2c1a24;
-  --art-pink: #f5b8c4;
-  --art-cherry: #c2244b;
-  --art-butter: #f4cf78;
-  --art-cream: #fff6ea;
-  --art-biscuit: #dfa266;
-  --art-choco: #6b3a2a;
+  --art-line: #3a2618;
+  --art-pink: #e8cfb0;
+  --art-cherry: #8b4a2b;
+  --art-butter: #e3c48f;
+  --art-cream: #fffaf2;
+  --art-biscuit: #c8945e;
+  --art-choco: #5a3220;
   --display: "Yeseva One", Georgia, "Times New Roman", serif;
   --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #1f1419; --surface: #2d1f26; --surface-2: #3a2a31; --ink: #f6ecdf; --muted: #c0aeb3;
-    --line: #4c3a42; --accent: #f2809f; --accent-soft: #4f2433; --on-accent: #2c1a24;
-    --butter: #f7d976; --on-butter: #2c1a24; --danger: #ff9a8d; color-scheme: dark;
+    --bg: #1c140f; --surface: #271c15; --surface-2: #33261d; --ink: #f5ece1; --muted: #c2b2a3;
+    --line: #46372b; --accent: #d6a77a; --accent-soft: #4a3424; --on-accent: #1c140f;
+    --butter: #e0c08f; --on-butter: #1c140f; --danger: #ff9a8d; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #1f1419; --surface: #2d1f26; --surface-2: #3a2a31; --ink: #f6ecdf; --muted: #c0aeb3;
-  --line: #4c3a42; --accent: #f2809f; --accent-soft: #4f2433; --on-accent: #2c1a24;
-  --butter: #f7d976; --on-butter: #2c1a24; --danger: #ff9a8d; color-scheme: dark;
+  --bg: #1c140f; --surface: #271c15; --surface-2: #33261d; --ink: #f5ece1; --muted: #c2b2a3;
+  --line: #46372b; --accent: #d6a77a; --accent-soft: #4a3424; --on-accent: #1c140f;
+  --butter: #e0c08f; --on-butter: #1c140f; --danger: #ff9a8d; color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -471,10 +471,11 @@ const CONFIG = {
   // Un prix null s'affiche « Sur devis ».
   carte: [
     {
-      categorie: "Gâteaux", note: "Sur devis",
+      categorie: "Gâteaux",
       produits: [
-        { id: "layer-cake", nom: "Layer cake", delai: 14, desc: "Pour toute occasion. Précisez le nombre de parts dans la partie 3.", formats: [["Layer cake", null]], choix: [SAVEURS_GATEAU] },
-        { id: "gateau", nom: "Bento cake ou number cake", delai: 7, desc: "Précisez le nombre de parts ou le chiffre souhaité dans la partie 3.", formats: [["Bento cake", null], ["Number cake", null]], choix: [SAVEURS_GATEAU] }
+        { id: "layer-cake", nom: "Layer cake", delai: 14, desc: "Pour toute occasion, sur devis. Précisez le nombre de parts dans la partie 3.", formats: [["Layer cake", null]], choix: [SAVEURS_GATEAU] },
+        { id: "bento-cake", nom: "Bento cake", delai: 7, desc: "Petit gâteau à offrir ou à partager. Précisez votre message dans la partie 3.", formats: [["Bento cake", 20]], choix: [SAVEURS_GATEAU] },
+        { id: "number-cake", nom: "Number cake", delai: 7, desc: "Gâteau en forme de chiffre ou de lettre. Indiquez le chiffre souhaité dans la partie 3.", formats: [["Number cake", 45]], choix: [SAVEURS_GATEAU] }
       ]
     },
     {
@@ -500,15 +501,21 @@ const CONFIG = {
         { id: "cinnamon-premium", nom: "Cinnamon roll premium", desc: "Des saveurs plus gourmandes.", formats: [["L'unité", 4.5]], choix: [
           { label: "Saveur", options: ["Caramel beurre salé / noix de pécan", "Nutella / noisettes", "Nocciolata / Kinder Bueno", "Spéculos / crunchy"] }
         ] },
-        { id: "cookies", nom: "Cookies", delai: 1, desc: "Dites-nous vos envies dans la partie 3.", formats: [["Box", null]] },
-        { id: "cupcakes", nom: "Cupcakes", desc: "Dites-nous vos envies dans la partie 3.", formats: [["Box", null]] },
+        { id: "cookies", nom: "Cookies", delai: 1, desc: "Sur devis. Choisissez la box et vos parfums.", formats: [["Box de 6", null], ["Box de 12", null], ["Box de 24", null]], choix: [
+          { label: "Parfums, plusieurs choix possibles", multiple: true, options: ["Pépites de chocolat", "Nutella", "Kinder Bueno", "Spéculos", "Pistache", "Caramel beurre salé"] }
+        ] },
+        { id: "cupcakes", nom: "Cupcakes", desc: "Sur devis. Choisissez la box et vos parfums.", formats: [["Box de 6", null], ["Box de 12", null], ["Box de 24", null]], choix: [
+          { label: "Parfums, plusieurs choix possibles", multiple: true, options: ["Vanille", "Chocolat", "Nutella", "Kinder Bueno", "Spéculos", "Framboise"] }
+        ] },
         { id: "sushi-crepes", nom: "Sushi crêpes", delai: 1, desc: "Dites-nous vos envies dans la partie 3.", formats: [["Box", null]] }
       ]
     },
     {
       categorie: "Plateaux", delai: 7, note: "Sur devis",
       produits: [
-        { id: "plateau-sale", nom: "Plateau salé", desc: "Pour vos buffets et apéritifs. Indiquez le nombre de personnes dans la partie 3.", formats: [["Plateau", null]] },
+        { id: "plateau-sale", nom: "Plateau salé", desc: "Pour vos buffets et apéritifs.", formats: [["10 personnes", null], ["20 personnes", null], ["30 personnes", null], ["Plus de 30", null]], choix: [
+          { label: "Envies, plusieurs choix possibles", multiple: true, options: ["Mini sandwichs", "Wraps", "Mini burgers", "Feuilletés", "Mini quiches", "Verrines"] }
+        ] },
         { id: "plateau-sucre", nom: "Plateau sucré", desc: "Pour vos buffets et desserts. Indiquez le nombre de personnes dans la partie 3.", formats: [["Plateau", null]] }
       ]
     }
