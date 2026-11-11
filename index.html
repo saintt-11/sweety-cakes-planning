@@ -437,20 +437,20 @@ const CONFIG = {
   },
   // Questions fréquentes affichées sous la commande : à modifier ici.
   faq: [
-    { q: "Comment passer commande ?", r: "Composez votre commande, choisissez un jour et une heure, puis laissez vos coordonnées. Votre créneau est réservé dès la validation." },
-    { q: "Combien de temps à l'avance dois-je commander ?", r: "Cela dépend des produits : 24 h pour les cookies et les sushi crêpes, 48 h pour les brownies, cupcakes, cinnamon rolls et mini pancakes, 72 h pour le brunch, 1 semaine pour les bento cakes, number cakes et plateaux, 2 semaines pour les layer cakes. Le délai est indiqué sous chaque produit, et le calendrier ne propose que les dates possibles pour votre commande." },
-    { q: "Comment savoir si ma commande est bien prise en compte ?", r: "Vous recevez votre bon de commande par e-mail, avec votre référence et votre créneau. Sweety Cakes vous confirme ensuite la commande en message. Si vous ne voyez pas l'e-mail, regardez dans vos spams." },
+    { q: "Comment passer commande ?", r: "Composez votre commande, choisissez un jour et une heure, puis laissez vos coordonnées. Votre créneau est réservé dès l'envoi, et la commande est validée à réception de l'acompte." },
+    { q: "Combien de temps à l'avance dois-je commander ?", r: "Cela dépend des produits : 24 h pour les cookies et les sushi crêpes, 48 h pour les brownies, cupcakes, cinnamon rolls et mini pancakes, 1 semaine pour les bento cakes, number cakes et plateaux, 2 semaines pour les layer cakes. Le délai est indiqué sous chaque produit, et le calendrier ne propose que les dates possibles pour votre commande." },
+    { q: "Comment savoir si ma commande est bien prise en compte ?", r: "Vous recevez votre bon de commande par e-mail, avec votre référence et votre créneau. Dès réception de votre acompte, vous recevez un second e-mail qui confirme la commande. Si vous ne voyez pas l'e-mail, regardez dans vos spams." },
     { q: "Où récupérer ma commande ?", r: "Le retrait se fait à l'atelier, au créneau que vous avez réservé. L'adresse vous est confirmée en message." },
     { q: "Livrez-vous à domicile ?", r: "Oui, la livraison est possible, avec un supplément selon votre adresse. Le montant vous est confirmé en message." },
-    { q: "Pourquoi certains produits sont-ils « sur devis » ?", r: "Le prix dépend de votre demande : taille, nombre de parts, décoration. Vous recevez le devis en message, et un acompte est obligatoire pour valider la commande." },
+    { q: "Pourquoi certains produits sont-ils « sur devis » ?", r: "Le prix dépend de votre demande : taille, nombre de parts, décoration. Vous recevez le devis en message, avec l'acompte de 40 % à verser pour valider la commande." },
+    { q: "Comment valider ma commande ?", r: "Votre créneau est réservé dès l'envoi de la commande. Pour la valider, versez un acompte de 40 % par Wero ou PayPal sous 48 h, avec votre référence de commande. Les informations de paiement sont dans votre bon de commande. Dès réception, vous recevez un e-mail de confirmation. Sans acompte sous 48 h, la commande est annulée." },
     { q: "Comment commander pour un événement ou en grande quantité ?", r: "Les devis pour les événements se font à l'avance, avec un acompte obligatoire. Pour plus de 10 brownies ou pour un buffet, précisez votre demande dans la partie 3 ou écrivez-nous sur Instagram." },
     { q: "Puis-je personnaliser mon gâteau ?", r: "Oui. Choisissez parmi les neuf saveurs proposées, indiquez le message à écrire sur le gâteau, puis ajoutez vos envies dans la case Allergies ou précisions." },
-    { q: "Quand le brunch est-il disponible ?", r: "Les box brunch sont proposées tous les dimanches : solo à 25 € ou duo à 45 €, avec une boisson au choix. Le brunch est halal." },
-    { q: "Vos autres produits sont-ils halal ?", r: "Demandez-le en message sur Instagram avant de commander, pour avoir une réponse sur le produit qui vous intéresse." },
+    { q: "Vos produits sont-ils halal ?", r: "Demandez-le en message sur Instagram avant de commander, pour avoir une réponse sur le produit qui vous intéresse." },
     { q: "Je suis allergique, comment faire ?", r: "Contactez Sweety Cakes sur Instagram avant de commander, puis indiquez vos allergies dans la case prévue à cet effet." },
     { q: "Le créneau que je veux est complet, que faire ?", r: "Choisissez une autre heure ou un autre jour. Les jours complets sont hachurés dans le calendrier." },
     { q: "Puis-je modifier ou annuler ma commande ?", r: "Écrivez à Sweety Cakes sur Instagram le plus tôt possible, en indiquant votre référence." },
-    { q: "Comment se passe le paiement ?", r: "Le paiement ne se fait pas sur ce site. Les modalités de règlement vous sont précisées en message lors de la confirmation." }
+    { q: "Comment se passe le paiement ?", r: "Le paiement ne se fait pas sur ce site. Un acompte de 40 % est à verser par Wero ou PayPal sous 48 h pour valider la commande : les informations sont dans votre bon de commande. Le règlement du solde vous est précisé en message." }
   ],
   placesParCreneau: 3,
   reservableSurJours: 56,
@@ -467,6 +467,8 @@ const CONFIG = {
   fermetures: [],
   // frais: null = supplément confirmé par message
   livraison: { active: true, frais: null },
+  // Acompte demandé pour valider chaque commande. Les coordonnées de paiement sont dans le script Google (bon de commande).
+  acompte: { pourcent: 40, delaiHeures: 48, moyens: "Wero ou PayPal" },
   // Un prix null s'affiche « Sur devis ».
   carte: [
     {
@@ -475,16 +477,6 @@ const CONFIG = {
         { id: "layer-cake", nom: "Layer cake", delai: 14, desc: "Pour toute occasion, sur devis. Choisissez le nombre de parts.", formats: [["6 parts", null], ["8 parts", null], ["10 parts", null], ["12 parts", null], ["15 parts", null], ["20 parts", null], ["25 parts", null]], choix: [SAVEURS_GATEAU] },
         { id: "bento-cake", nom: "Bento cake", delai: 7, desc: "Petit gâteau à offrir ou à partager. Précisez votre message dans la partie 3.", formats: [["Bento cake", 20]], choix: [SAVEURS_GATEAU] },
         { id: "number-cake", nom: "Number cake", delai: 7, desc: "Gâteau en forme de chiffre ou de lettre. Indiquez le chiffre souhaité dans la partie 3.", formats: [["Number cake", 45]], choix: [SAVEURS_GATEAU] }
-      ]
-    },
-    {
-      categorie: "Brunch", delai: 3, jours: [0], note: "Tous les dimanches",
-      produits: [
-        { id: "brunch", nom: "Box brunch", desc: "Egg muffin, charcuterie, brioche perdue, une pièce salée et une pièce sucrée au choix. Halal.", formats: [["Solo", 25], ["Duo", 45]], choix: [
-          { label: "Salé", options: ["Bagel thon", "Bagel poulet", "Croissant saumon/avocat"] },
-          { label: "Sucré", options: ["Pancakes", "Gaufres"] },
-          { label: "Boisson", options: ["Jus de pomme", "Jus d'orange"] }
-        ] }
       ]
     },
     {
@@ -604,6 +596,13 @@ const delivery = () => state.mode === "livraison" ? (CONFIG.livraison.frais || 0
 const subtotal = () => cartLines().reduce((s, l) => s + (l.price || 0) * l.qty, 0);
 const hasQuote = () => cartLines().some(l => l.price === null);
 const dayAllowed = d => cartLines().every(l => !l.p.jours || l.p.jours.includes(d.getDay()));
+const acompteText = (quote, total) => {
+  const a = CONFIG.acompte;
+  if (!quote && total <= 0) return `Un acompte de ${a.pourcent} % par ${a.moyens} est demandé pour valider chaque commande.`;
+  return quote
+    ? `Un acompte de ${a.pourcent} % vous est demandé avec le devis pour valider la commande.`
+    : `Pour valider la commande, versez un acompte de ${a.pourcent} %, soit ${euros(Math.round(total * a.pourcent) / 100)}, par ${a.moyens} sous ${a.delaiHeures} h. Sans acompte, la commande est annulée.`;
+};
 const priceText = (price, qty = 1) => price === null ? "Sur devis" : euros(price * qty);
 
 /* ---------- Disponibilité ---------- */
@@ -744,7 +743,7 @@ function renderTicket() {
     <div class="row"><span>${liv ? "Livraison" : "Retrait"}</span><span>${esc(when)}</span></div>
     ${liv ? `<div class="row"><span>Supplément livraison</span><span>${feeUnknown ? "À confirmer" : euros(delivery())}</span></div>` : ""}
     <div class="row total"><span>${excluded.length ? `Total hors ${excluded.join(" et ")}` : "Total"}</span><span>${euros(subtotal() + (lines.length ? delivery() : 0))}</span></div>`;
-  $("payNote").textContent = hasQuote() ? "Le devis vous est envoyé en message. Un acompte est obligatoire pour valider la commande." : "Sweety Cakes vous confirme la commande en message.";
+  $("payNote").textContent = (hasQuote() ? "Le devis vous est envoyé en message. " : "") + acompteText(hasQuote(), subtotal());
   const count = lines.reduce((s, l) => s + l.qty, 0);
   $("mobileBar").hidden = !count || !$("confirmation").hidden;
   document.body.classList.toggle("has-bar", !$("mobileBar").hidden);
@@ -849,7 +848,7 @@ async function submitOrder() {
   box.hidden = false;
   box.innerHTML = `
     <div class="ticket">
-      <h2>Votre créneau est réservé</h2>
+      <h2>Votre créneau est réservé, commande à confirmer</h2>
       <p>Merci ${esc(client)}. ${liv ? "Votre commande vous sera livrée" : "Votre commande vous attend"} ${esc(longDate(state.date))} à ${hour(state.time)}.</p>
       <div class="row"><span>Référence</span><span class="ref">${ref}</span></div>
       <ul class="lines">${lines.map(l => `<li class="line"><div class="line-name">${l.qty} × ${esc(l.p.nom)}<small>${esc([l.label, l.detail].filter(Boolean).join(" · "))}</small></div><div class="line-price">${priceText(l.price, l.qty)}</div></li>`).join("")}</ul>
@@ -858,7 +857,8 @@ async function submitOrder() {
         <div class="row total"><span>${quote || feeUnknown ? "Total hors " + [quote && "devis", feeUnknown && "livraison"].filter(Boolean).join(" et ") : "Total"}</span><span>${euros(total)}</span></div>
       </div>
       ${CONFIG.commandesUrl ? `<p>${mailSent ? `Votre bon de commande vient d'être envoyé à ${esc($("email").value.trim())}.` : "Notez votre référence : le bon de commande n'a pas pu être envoyé par e-mail."}</p>` : ""}
-      <p>${quote ? "Sweety Cakes vous envoie le devis en message. Un acompte est obligatoire pour valider la commande." : "Sweety Cakes vous confirme la commande en message."}</p>
+      <p>${quote ? "Sweety Cakes vous envoie le devis en message. " : ""}${acompteText(quote, total)}</p>
+      ${CONFIG.commandesUrl ? `<p>${mailSent ? "Les informations de paiement sont dans votre bon de commande. Vous recevrez un e-mail de confirmation dès réception de l'acompte." : `Écrivez-nous sur Instagram, ${esc(CONFIG.boutique.instagram.compte)}, pour régler l'acompte.`}</p>` : ""}
       <div>
       </div>
       ${CONFIG.demo ? `<p class="notice">Démonstration : cette commande reste dans ce navigateur et n'a pas été envoyée à la pâtisserie.</p>` : ""}
