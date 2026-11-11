@@ -432,17 +432,16 @@ const CONFIG = {
   boutique: {
     nom: "Sweety Cakes",
     accroche: "Des gâteaux pour toute occasion et des gourmandises pour vos buffets, toute l'année. Composez votre commande et réservez votre créneau.",
-    infos: ["Les Bordes / Sully-sur-Loire et alentours", "Livraison Orléans et Montargis"],
-    instagram: { compte: "@sweetycakees_", url: "https://www.instagram.com/sweetycakees_/" },
-    retrait: "Les Bordes / Sully-sur-Loire"
+    infos: ["Livraison possible"],
+    instagram: { compte: "@sweetycakees_", url: "https://www.instagram.com/sweetycakees_/" }
   },
   // Questions fréquentes affichées sous la commande : à modifier ici.
   faq: [
     { q: "Comment passer commande ?", r: "Composez votre commande, choisissez un jour et une heure, puis laissez vos coordonnées. Votre créneau est réservé dès la validation." },
-    { q: "Combien de temps à l'avance dois-je commander ?", r: "Cela dépend des produits : 24 h pour les cookies et les sushi crêpes, 48 h pour les brownies, cupcakes, cinnamon rolls et mini pancakes, 72 h pour le brunch, 1 semaine pour les bento cakes, number cakes et plateaux salés, 2 semaines pour les layer cakes. Le délai est indiqué sous chaque produit, et le calendrier ne propose que les dates possibles pour votre commande." },
+    { q: "Combien de temps à l'avance dois-je commander ?", r: "Cela dépend des produits : 24 h pour les cookies et les sushi crêpes, 48 h pour les brownies, cupcakes, cinnamon rolls et mini pancakes, 72 h pour le brunch, 1 semaine pour les bento cakes, number cakes et plateaux, 2 semaines pour les layer cakes. Le délai est indiqué sous chaque produit, et le calendrier ne propose que les dates possibles pour votre commande." },
     { q: "Comment savoir si ma commande est bien prise en compte ?", r: "Vous recevez votre bon de commande par e-mail, avec votre référence et votre créneau. Sweety Cakes vous confirme ensuite la commande en message. Si vous ne voyez pas l'e-mail, regardez dans vos spams." },
-    { q: "Où récupérer ma commande ?", r: "Le retrait se fait à Les Bordes / Sully-sur-Loire, au créneau que vous avez réservé." },
-    { q: "Livrez-vous à domicile ?", r: "Oui, la livraison est possible sur Orléans et Montargis, avec un supplément selon votre secteur. Le montant vous est confirmé en message." },
+    { q: "Où récupérer ma commande ?", r: "Le retrait se fait à l'atelier, au créneau que vous avez réservé. L'adresse vous est confirmée en message." },
+    { q: "Livrez-vous à domicile ?", r: "Oui, la livraison est possible, avec un supplément selon votre adresse. Le montant vous est confirmé en message." },
     { q: "Pourquoi certains produits sont-ils « sur devis » ?", r: "Le prix dépend de votre demande : taille, nombre de parts, décoration. Vous recevez le devis en message, et un acompte est obligatoire pour valider la commande." },
     { q: "Comment commander pour un événement ou en grande quantité ?", r: "Les devis pour les événements se font à l'avance, avec un acompte obligatoire. Pour plus de 10 brownies ou pour un buffet, précisez votre demande dans la partie 3 ou écrivez-nous sur Instagram." },
     { q: "Puis-je personnaliser mon gâteau ?", r: "Oui. Choisissez parmi les neuf saveurs proposées, indiquez le message à écrire sur le gâteau, puis ajoutez vos envies dans la case Allergies ou précisions." },
@@ -467,7 +466,7 @@ const CONFIG = {
   },
   fermetures: [],
   // frais: null = supplément confirmé par message
-  livraison: { active: true, frais: null, zone: "Orléans et Montargis, supplément selon le secteur" },
+  livraison: { active: true, frais: null },
   // Un prix null s'affiche « Sur devis ».
   carte: [
     {
@@ -515,6 +514,9 @@ const CONFIG = {
       produits: [
         { id: "plateau-sale", nom: "Plateau salé", desc: "Pour vos buffets et apéritifs. Choisissez le nombre de pièces et vos envies.", formats: [["25 pièces", null], ["30 pièces", null], ["35 pièces", null], ["40 pièces", null], ["50 pièces", null]], choix: [
           { label: "Envies, plusieurs choix possibles", multiple: true, options: ["Pizza", "Wrap", "Tacos", "Burger", "Club sandwich", "Brick", "Hot dog", "Batbout", "Pastels"] }
+        ] },
+        { id: "plateau-sucre", nom: "Plateau sucré", desc: "Pour vos buffets et desserts. Choisissez le nombre de pièces et vos envies.", formats: [["25 pièces", null], ["30 pièces", null], ["35 pièces", null], ["40 pièces", null], ["50 pièces", null]], choix: [
+          { label: "Envies, plusieurs choix possibles", multiple: true, options: ["Mini cookies", "Brownies", "Pavlova", "Cupcakes", "Verrines sucrées", "Panna cotta", "Fondant au chocolat"] }
         ] }
       ]
     }
@@ -642,8 +644,8 @@ function renderShop() {
     </a>
     <a class="faq-link" href="#faq">Questions fréquentes</a>`;
   $("modes").innerHTML = `
-    <label class="mode"><input type="radio" name="mode" value="retrait" checked><span><strong>Retrait à l'atelier</strong><small>${esc(CONFIG.boutique.retrait)}</small></span></label>
-    ${CONFIG.livraison.active ? `<label class="mode"><input type="radio" name="mode" value="livraison"><span><strong>Livraison</strong><small>${esc(CONFIG.livraison.zone)}</small></span></label>` : ""}`;
+    <label class="mode"><input type="radio" name="mode" value="retrait" checked><span><strong>Retrait à l'atelier</strong></span></label>
+    ${CONFIG.livraison.active ? `<label class="mode"><input type="radio" name="mode" value="livraison"><span><strong>Livraison</strong></span></label>` : ""}`;
 }
 function renderFaq() {
   const insta = CONFIG.boutique.instagram;
