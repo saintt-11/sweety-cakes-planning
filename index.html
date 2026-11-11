@@ -410,6 +410,8 @@ body.has-bar { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
 /* ==========================================================
    À PERSONNALISER : tout ce qui concerne la boutique est ici.
    ========================================================== */
+// Plateaux : nombre d'envies au choix selon le format (25 et 30 pièces : 4, de 35 à 50 pièces : 5).
+const PLATEAU_MAX = [4, 4, 5, 5, 5];
 const SAVEURS_GATEAU = {
   label: "Saveur",
   options: ["Framboise", "Pomme caramel", "Mangue passion", "Kinder", "Praliné", "Spéculos", "Framboise pistache", "Mont coco", "Poire chocolat"],
@@ -502,13 +504,13 @@ const CONFIG = {
       ]
     },
     {
-      categorie: "Plateaux", delai: 7, note: "Sur devis",
+      categorie: "Plateaux", delai: 7,
       produits: [
-        { id: "plateau-sale", nom: "Plateau salé", desc: "Pour vos buffets et apéritifs. Choisissez le nombre de pièces et vos envies.", formats: [["25 pièces", null], ["30 pièces", null], ["35 pièces", null], ["40 pièces", null], ["50 pièces", null]], choix: [
-          { label: "Envies, plusieurs choix possibles", multiple: true, options: ["Pizza", "Wrap", "Tacos", "Burger", "Club sandwich", "Brick", "Hot dog", "Batbout", "Pastels"] }
+        { id: "plateau-sale", nom: "Plateau salé", desc: "Pour vos buffets et apéritifs. Choisissez le nombre de pièces et vos envies.", formats: [["25 pièces", 35], ["30 pièces", 45], ["35 pièces", 55], ["40 pièces", 65], ["50 pièces", 85]], choix: [
+          { label: "Vos envies", multiple: true, max: PLATEAU_MAX, options: ["Pizza", "Wrap", "Tacos", "Burger", "Club sandwich", "Brick", "Hot dog", "Batbout", "Pastels"] }
         ] },
-        { id: "plateau-sucre", nom: "Plateau sucré", desc: "Pour vos buffets et desserts. Choisissez le nombre de pièces et vos envies.", formats: [["25 pièces", null], ["30 pièces", null], ["35 pièces", null], ["40 pièces", null], ["50 pièces", null]], choix: [
-          { label: "Envies, plusieurs choix possibles", multiple: true, options: ["Mini cookies", "Brownies", "Pavlova", "Cupcakes", "Verrines sucrées", "Panna cotta", "Fondant au chocolat"] }
+        { id: "plateau-sucre", nom: "Plateau sucré", desc: "Pour vos buffets et desserts. Choisissez le nombre de pièces et vos envies.", formats: [["25 pièces", 35], ["30 pièces", 45], ["35 pièces", 55], ["40 pièces", 65], ["50 pièces", 85]], choix: [
+          { label: "Vos envies", multiple: true, max: PLATEAU_MAX, options: ["Mini cookies", "Brownies", "Pavlova", "Cupcakes", "Verrines sucrées", "Panna cotta", "Fondant au chocolat"] }
         ] }
       ]
     }
@@ -580,6 +582,7 @@ function resetChoices(id) {
 }
 products.forEach((_, id) => resetChoices(id));
 
+const maxChoix = (id, c) => Array.isArray(c.max) ? c.max[state.chosen[id]] : c.max;
 const optionsPrice = (p, opts) => (p.choix || []).reduce((sum, c, g) => sum + (c.prix || 0) * opts[g].length, 0);
 const encodeOpts = opts => opts.map(a => [...a].sort((x, y) => x - y).join(".")).join("_");
 const cartLines = () => Object.entries(state.cart).map(([key, qty]) => {
@@ -680,7 +683,7 @@ function renderProduct(id) {
   $(`formats-${id}`).innerHTML = p.formats.length > 1 ? p.formats.map(([label], n) => `<button type="button" class="format" data-format="${id}|${n}" aria-pressed="${n === i}">${esc(label)}</button>`).join("") : `<span class="unit">${esc(p.formats[0][0])}</span>`;
   $(`choices-${id}`).innerHTML = (p.choix || []).map((c, g) => `
     <div class="choice" role="group" aria-label="${esc(c.label)}">
-      <div class="choice-label">${esc(c.label)}</div>
+      <div class="choice-label">${esc(c.label)}${maxChoix(id, c) ? ` · ${maxChoix(id, c)} choix maximum (${opts[g].length}/${maxChoix(id, c)})` : ""}</div>
       <div class="formats">${c.options.map((o, n) => `<button type="button" class="format" data-opt="${id}|${g}|${n}" aria-pressed="${opts[g].includes(n)}">${esc(o)}</button>`).join("")}</div>
       ${c.details ? `<div class="product-desc">${esc(c.details[opts[g][0]])}</div>` : ""}
     </div>`).join("");
@@ -883,10 +886,17 @@ function resetOrder() {
 document.addEventListener("click", e => {
   const b = e.target.closest("button");
   if (!b) return;
-  if (b.dataset.format) { const [id, n] = b.dataset.format.split("|"); state.chosen[id] = Number(n); renderProduct(id); }
+  if (b.dataset.format) {
+    const [id, n] = b.dataset.format.split("|");
+    state.chosen[id] = Number(n);
+    (products.get(id).choix || []).forEach((c, g) => { const max = maxChoix(id, c); if (max) state.opts[id][g] = state.opts[id][g].slice(0, max); });
+    renderProduct(id);
+  }
   else if (b.dataset.opt) {
     const [id, g, n] = b.dataset.opt.split("|"), group = Number(g), value = Number(n);
     const c = products.get(id).choix[group], cur = state.opts[id][group];
+    const max = maxChoix(id, c);
+    if (c.multiple && !cur.includes(value) && max && cur.length >= max) return;
     state.opts[id][group] = !c.multiple ? [value] : cur.includes(value) ? cur.filter(x => x !== value) : [...cur, value];
     renderProduct(id);
   }
